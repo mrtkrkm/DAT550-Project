@@ -3,11 +3,14 @@ import json
 import re
 import unicodedata
 from Seq2Seq.Vocab import  Vocab
-class CreateTexts(object):
+class CreatePairs(object):
     def __init__(self,DDIR, corpus, utterancesPath, Max_length):
         self.path=os.path.join(DDIR, corpus, utterancesPath)
         self.MAX_LENGTH=Max_length
         self.name=corpus
+        self.createUtterances()
+        self.setId()
+        self.createEncDecUt()
 
     def createUtterances(self):
         self.utterances = []
@@ -62,7 +65,7 @@ class CreateTexts(object):
 
     def load_data(self):
         print('Starting')
-        pairs, vocab = self.read_voc(self.textlist, self.name)
+        pairs, vocab = self.read_voc(self.textlist)
         print(f'Number of pairs is {len(pairs)}')
         pairs = self.filterPairs(pairs)
         print(f'After filters Number of pairs is {len(pairs)}')
