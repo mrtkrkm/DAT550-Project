@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch
 from torch.jit import script, trace
 import torch.nn as nn
+import torch.nn.functional as F
 
 class Attn(nn.Module):
     def __init__(self, method, hidden_size):

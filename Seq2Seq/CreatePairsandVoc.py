@@ -3,35 +3,76 @@ import json
 import re
 import unicodedata
 from Seq2Seq.Vocab import  Vocab
+import yaml
 class CreatePairs(object):
-    def __init__(self,DDIR, corpus, utterancesPath, Max_length):
-        self.path=os.path.join(DDIR, corpus, utterancesPath)
+    def __init__(self,DDIR, corpus, FutterancesPath, Max_length, convai_p, chatter_p):
+        self.DDIR=DDIR
+        self.path_f=os.path.join(DDIR, corpus, FutterancesPath)
         self.MAX_LENGTH=Max_length
-        self.name=corpus
-        self.createUtterances()
-        self.setId()
-        self.createEncDecUt()
-
-    def createUtterances(self):
-        self.utterances = []
-        with open(self.path, 'r', encoding='utf-8') as p:
-            for line in p:
-                self.utterances.append(json.loads(line))
-
-    def setId(self):
-        self.idtext = {}
-        for ut in self.utterances:
-            self.idtext[ut['id']] = ut['text']
-
-    def createEncDecUt(self):
-        text = ''
-        delimiter = '\t'
+        self.name='Friends-ConvAI-Chatter'
         self.textlist = []
-        for ut in self.utterances:
+        self.convaiPaths=convai_p
+        self.chatterPaths = os.listdir(os.path.join(DDIR, chatter_p))
+        self.chatter_p=chatter_p
+        self.delimiter='\t'
+        self.FriendscreateEncDecUt()
+        self.ConvACreateEncDec()
+        self.chatterCreateEncDec()
+
+    def FriendscreateEncDecUt(self):
+        utterances = []
+        with open(self.path_f, 'r', encoding='utf-8') as p:
+            for line in p:
+                utterances.append(json.loads(line))
+        idtext = {}
+        for ut in utterances:
+            idtext[ut['id']] = ut['text']
+        text = ''
+
+        for ut in utterances:
             text = ''
             if ut['reply-to'] != None:
-                if ut['text'] != '' and self.idtext[ut['reply-to']] != '':
-                    text += self.idtext[ut['reply-to']] + delimiter + ut['text']
+                if ut['text'] != '' and idtext[ut['reply-to']] != '':
+                    text += idtext[ut['reply-to']] + self.delimiter + ut['text']
+                    self.textlist.append(text)
+
+    def ConvACreateEncDec(self):
+        paths = []
+        for conv in self.convaiPaths:
+            paths.append(os.path.join(self.DDIR, conv))
+        utterancesc = []
+        for path in paths:
+            with open(path, 'r', encoding='utf-8') as p:
+                for line in p:
+                    utterancesc.append(json.loads(line))
+        for utterance in utterancesc:
+            for utter in utterance:
+                if len(utter['dialog']) > 1:
+                    oldsender = utter['dialog'][0]['sender_class']
+                    for i in range(1, len(utter['dialog'])):
+                        sender = utter['dialog'][i]['sender_class']
+                        if sender != oldsender:
+                            text = utter['dialog'][i - 1]['text'] + self.delimiter + utter['dialog'][i]['text']
+                        oldsender = utter['dialog'][i]['sender_class']
+                        self.textlist.append(text)
+
+    def chatterCreateEncDec(self):
+        for c_path in self.chatterPaths:
+            file = os.path.join(self.DDIR, self.chatter_p, c_path)
+            with open(file, 'r', encoding='utf-8') as c:
+                utt = yaml.safe_load(c)
+            if c_path == 'literature.yml':
+                utt['conversations'][-2][1] = utt['conversations'][-2][1].replace('Tolkein', 'Tolkien')
+            for convers in utt['conversations']:
+                if type(convers[1]) == dict:
+                    key = list(convers[1].keys())[0]
+                    value = list(convers[1].values())[0]
+                    text1 = convers[0] + self.delimiter + key
+                    text2 = convers[0] + self.delimiter + value
+                    self.textlist.append(text1)
+                    self.textlist.append(text2)
+                else:
+                    text = convers[0] + self.delimiter + convers[1]
                     self.textlist.append(text)
 
     def unicodeToAscii(self,s):

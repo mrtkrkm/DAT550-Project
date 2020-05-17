@@ -1,7 +1,7 @@
 import os
 import json
 from tqdm import notebook
-from GetInfo import GetInfo
+from PreProcess.GetInfo import GetInfo
 import pandas as pd
 
 class OpenData(object):
