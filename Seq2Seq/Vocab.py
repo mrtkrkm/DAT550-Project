@@ -1,5 +1,3 @@
-
-
 class Vocab(object):
     def __init__(self, name):
         self.PAD = 0

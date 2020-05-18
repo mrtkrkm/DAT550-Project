@@ -11,6 +11,7 @@ class TaskModelling(object):
     def __init__(self,eddir, tddir):
         self.tasks=GetTasks.get_tasks(tddir)
         self.ddir=eddir
+        print('Please wait until create the embedding file')
         self.embedding_index=self.get_glove_embed(self.ddir)
         self.cat_embed={}
         self.categories_task = {}
