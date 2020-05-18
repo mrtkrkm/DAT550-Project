@@ -14,8 +14,9 @@ class ResponseFunctions(object):
                     'COVID19', 'SARSCoV2',
                     'SARSCoronavirus2', '2019NovelCoronavirus']
 
-        self.Related_word = self.Cov_list + ['Virus', 'transmission', 'incubate', 'incubation', 'weather', 'summer', 'virus',
-                                   'Corona', 'corona', 'prevent', 'mask', 'disinfectant']
+        self.Related_word = self.Cov_list + ['Virus', 'virus','transmission', 'incubate', 'incubation', 'weather', 'summer', 'virus',
+                                   'Corona', 'corona', 'prevent', 'mask', 'disinfectant','precaution','drug','seasonality','immune',
+                                             'immunity','avoid','surface']
 
         self.all_dicts, self.all_sums = self.read_dict_sum()
         self.task_questions = joblib.load('data/tasks/task_questions')
@@ -108,11 +109,11 @@ class ResponseFunctions(object):
             distances, idx = self.check_distanceq(best, user_i)
             if len(distances) > 0:
                 items = self.task_questions[idx][sorted(distances.items(), key=lambda x: x[0], reverse=True)[0][0]]
-                #quest, response = self.find_task_Summary(items)
+                _, responseS = self.find_task_Summary(items)
                 quest, response, urls = self.find_task_ques(items)
             else:
                 response = "Sorry i couldn't understand your question. Can you give more detail?"
                 quest = ''
                 urls=['']
-        return quest, response,urls
+        return quest, response,urls, responseS
 

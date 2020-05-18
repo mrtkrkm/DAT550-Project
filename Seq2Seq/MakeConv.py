@@ -25,7 +25,7 @@ class MakeConv(object):
         #self.hidden_size = 300
         self.encoder_n_layers = 2
         self.decoder_n_layers = 2
-        self.dropout = 0.2
+        self.dropout = 0.1
         batch_size = 64
         checkpoint_iter = 20000
         self.EOS = 2
@@ -135,22 +135,27 @@ class MakeConv(object):
                     if (input_sentence != 'bye'):
                         user_i = input_sentence
                         ques = self.functions.embeddings.check_distance(user_i)
-                        quest, response, urls = self.functions.sort_response(ques, user_i)
+                        quest, response, urls, responseS = self.functions.sort_response(ques, user_i)
                         responsek = response
                         if quest!='':
                             display(Markdown(f'<span style="color: black">Do you want to ask this:{quest}</span>'))
                     else:
                         response = self.End_conv()
                         Stop = True
-                    display(Markdown(f'<span style="color: red">{reminder}?</span>'))
+                        responseS=''
+                    display(Markdown(f'<span style="color: red">{reminder}</span>'))
                     if len(response.split('\n')) > 1:
                         for i,resp_p in enumerate(response.split('\n')):
                             display(HTML(f"""<a href={urls[i]} style="color: blue">{resp_p}</a>"""))
                             #display(Markdown(f'<span style="color: blue">{resp_p}</span>'))
+                        display(Markdown(f'<span style="color: red">Also the summary of 3100 article is:</span>'))
+                        display(Markdown(f'<span style="color: black">{responseS}</span>'))
                     else:
                         #display(Markdown(f'<span style="color: blue">{response}</span>'))
                         display(HTML(f"""<a href={urls[0]} style="color: blue">{response}</a>"""))
                         # Normalize sentence
+                        display(Markdown(f'<span style="color: red">Also the summary of 3100 article is:</span>'))
+                        display(Markdown(f'<span style="color: black">{responseS}</span>'))
                 else:
                     input_sentence = self.sentenceOperation(input_sentence)
                     # Evaluate sentence

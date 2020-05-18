@@ -10,7 +10,7 @@ class EncoderRNN(nn.Module):
         self.n_layers = n_layers
         self.hidden_size = hidden_size
         self.embedding = embedding
-        self.gru = nn.LSTM(hidden_size, hidden_size, n_layers,
+        self.gru = nn.GRU(hidden_size, hidden_size, n_layers,
                           dropout=(0 if n_layers == 1 else dropout), bidirectional=True)
 
     def forward(self, input_seq, input_lengths, hidden=None):
@@ -20,3 +20,5 @@ class EncoderRNN(nn.Module):
         outputs, _ = nn.utils.rnn.pad_packed_sequence(outputs)
         outputs = outputs[:, :, :self.hidden_size] + outputs[:, : ,self.hidden_size:]
         return outputs, hidden
+
+    

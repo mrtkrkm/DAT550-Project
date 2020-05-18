@@ -55,13 +55,13 @@ class TaskModelling(object):
             tasks_c[f'task {i + 1}'] = self.get_counts_task(self.tasks[task])
         tasks_missings = {
             'task 1': ['incubation', 'stability', 'seasonality', 'season', 'winter', 'spring', 'summer', 'autumn','prediodically',
-                       'carrying', 'transference', 'immunity', 'immune','quarantine','country', 'surface',],
+                       'carrying', 'transference', 'immunity', 'immune','quarantine','country', 'surface','weather'],
             'task 2': ['danger', 'hazard', 'exposure','pregnancy','heart','prevent','weather','season','mask','disinfectant','hypertension','patient','prevention','precaution'],
             'task 3': ['genetic', 'origin','animal'],
             'task 4': ['interventions', 'non-pharmaceutical','drug','antiviral','ai'],
             'task 5': ['therapeutics'],
             'task 6': ['considerations', 'published'],
-            'task 7':['phenotypic','tool','detect','adaptation'],
+            'task 7': ['phenotypic','tool','detect','adaptation'],
             'task 8': ['published', 'prevent', 'precaution', 'inhibit', 'block', 'avoid', 'forbid', 'avert','ethical'],
             'task 9': ['inter-sectoral', 'collaboration', 'published', 'sharing', 'information-sharing','rumors','misinformation']
         }
