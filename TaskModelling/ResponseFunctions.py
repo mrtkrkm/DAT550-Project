@@ -7,7 +7,7 @@ import string
 import scipy.spatial.distance as distance
 
 class ResponseFunctions(object):
-    def __init__(self, embedding_path, task_path,):
+    def __init__(self, embedding_path, task_path, meta_dat):
         self.embeddings=TaskModelling(embedding_path,task_path)
         self.tasks = GetTasks.get_tasks(task_path)
         self.Cov_list = ['COVID-19', 'SARS-CoV-2', '2019-nCov', 'SARS Coronavirus 2', '2019 Novel Coronavirus', '2019nCoV',
@@ -20,6 +20,8 @@ class ResponseFunctions(object):
         self.all_dicts, self.all_sums = self.read_dict_sum()
         self.task_questions = joblib.load('data/tasks/task_questions')
         self.new_embed=self.embeddings.fit()
+        print('Loading Meta Data')
+        self.meta=joblib.load(meta_dat)
 
     def read_dict_sum(self):
         def merge_files(path_d, path_s):
@@ -53,11 +55,16 @@ class ResponseFunctions(object):
         text = 'My First answer is:'
         # task=int(scores[0][-1])
         rangeS = 2
+        urls=[]
         for i in range(rangeS):
-            text = text + self.all_dicts[scores].iloc[i, 3]
+            row=self.all_dicts[scores].iloc[i, :]
+            answ = row['answer_sent']
+            text = text + answ
+            url=list(self.meta[self.meta['Id']==row['Id']]['url'])[0]
+            urls.append(url)
             if i < rangeS - 1:
                 text = text + os.linesep + 'Another Answer is:'
-        return scores, text
+        return scores, text, urls
 
     def End_conv(self):
         time = int(str(datetime.datetime.now().time())[:2])
@@ -93,6 +100,7 @@ class ResponseFunctions(object):
         if len(result) < 1:
             response = "Sorry i couldn't understand your question. Can you give more detail?"
             quest = ''
+            urls = ['']
         else:
             best = sorted(result.items(), key=lambda x: x[1], reverse=True)[0]
             # response=find_task_ques(best)
@@ -100,9 +108,11 @@ class ResponseFunctions(object):
             distances, idx = self.check_distanceq(best, user_i)
             if len(distances) > 0:
                 items = self.task_questions[idx][sorted(distances.items(), key=lambda x: x[0], reverse=True)[0][0]]
-                quest, response = self.find_task_Summary(items)
+                #quest, response = self.find_task_Summary(items)
+                quest, response, urls = self.find_task_ques(items)
             else:
                 response = "Sorry i couldn't understand your question. Can you give more detail?"
                 quest = ''
-        return quest, response
+                urls=['']
+        return quest, response,urls
 

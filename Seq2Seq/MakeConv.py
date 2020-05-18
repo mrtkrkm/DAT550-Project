@@ -8,22 +8,24 @@ import torch.nn as nn
 import unicodedata
 import re
 from Seq2Seq.GreedySearchDecoder import GreedySearchDecoder
-from IPython.display import Markdown
+from IPython.display import Markdown, HTML
 from IPython.display import display
 from ipywidgets import interact, interactive, fixed, interact_manual
 import ipywidgets as widgets
 class MakeConv(object):
-    def __init__(self, embedding_path, task_path, device):
-        self.functions = ResponseFunctions(embedding_path, task_path)
+    def __init__(self, embedding_path, task_path, device, name, meta_path):
+        self.functions = ResponseFunctions(embedding_path, task_path, meta_path)
         pathf = 'C:/Users/mkork/Desktop/dat'
         save_dir = os.path.join("data", "save")
-        corpus_name = 'ConvAIandFriends'
+        corpus_name = name
         self.attn_model = 'dot'
-        model_name = 'ConvAIandFriends'
+        model_name=name
+        #model_name = 'ConvAIandFriends'
         self.hidden_size = 600
+        #self.hidden_size = 300
         self.encoder_n_layers = 2
         self.decoder_n_layers = 2
-        self.dropout = 0.1
+        self.dropout = 0.2
         batch_size = 64
         checkpoint_iter = 20000
         self.EOS = 2
@@ -127,21 +129,27 @@ class MakeConv(object):
                 # Check if it is quit case
                 if input_sentence == 'q' or input_sentence == 'quit': break
 
+                reminder='Reminder; you can click the answer to read the article'
+
                 if res:
                     if (input_sentence != 'bye'):
                         user_i = input_sentence
                         ques = self.functions.embeddings.check_distance(user_i)
-                        quest, response = self.functions.sort_response(ques, user_i)
+                        quest, response, urls = self.functions.sort_response(ques, user_i)
                         responsek = response
-                        display(Markdown(f'<span style="color: red">Do you want to ask this:{quest}?</span>'))
+                        if quest!='':
+                            display(Markdown(f'<span style="color: black">Do you want to ask this:{quest}</span>'))
                     else:
                         response = self.End_conv()
                         Stop = True
+                    display(Markdown(f'<span style="color: red">{reminder}?</span>'))
                     if len(response.split('\n')) > 1:
-                        for resp_p in response.split('\n'):
-                            display(Markdown(f'<span style="color: blue">{resp_p}</span>'))
+                        for i,resp_p in enumerate(response.split('\n')):
+                            display(HTML(f"""<a href={urls[i]} style="color: blue">{resp_p}</a>"""))
+                            #display(Markdown(f'<span style="color: blue">{resp_p}</span>'))
                     else:
-                        display(Markdown(f'<span style="color: blue">{response}</span>'))
+                        #display(Markdown(f'<span style="color: blue">{response}</span>'))
+                        display(HTML(f"""<a href={urls[0]} style="color: blue">{response}</a>"""))
                         # Normalize sentence
                 else:
                     input_sentence = self.sentenceOperation(input_sentence)

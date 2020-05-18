@@ -4,7 +4,7 @@ from transformers import BertTokenizer
 from transformers import BertForQuestionAnswering
 from tqdm import notebook
 from QAModels.Summary_Model import Summary_Model
-
+import numpy as np
 
 class QuestionAnswering(object):
     def __init__(self, bert_model_path, token_model_path, device):
