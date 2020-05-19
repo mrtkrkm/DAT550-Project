@@ -1,4 +1,5 @@
-# DAT550-Project
+# Data Mining DAT550-Project
+# Building a chatbot about COVID-19 with Task Modelling
 Murat korkmaz
 
 In order to talk with chatbot use one of the StartConversations jupyter file.
@@ -7,7 +8,7 @@ MakeConv=MakeConv(Embedding_Path, Task_Path, device, name, meta)
 ```
 
 Change the embedding_path with your embedding path\
-Also change the meta path with your metadata.csv path\
+Also change the meta path with your metadata.csv path
 
 If you want to use StartConversationsLSTM jupyter file
 
