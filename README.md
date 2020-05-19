@@ -6,8 +6,8 @@ In order to talk with chatbot use one of the StartConversations jupyter file.
 MakeConv=MakeConv(Embedding_Path, Task_Path, device, name, meta)
 ```
 
-Change the embedding_path with your embedding path__
-Also change the meta path with your metadata.csv path__
+Change the embedding_path with your embedding path\
+Also change the meta path with your metadata.csv path\
 
 If you want to use StartConversationsLSTM jupyter file
 
