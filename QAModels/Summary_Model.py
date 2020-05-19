@@ -3,6 +3,11 @@ import pandas as pd
 import numpy as np
 from transformers import BartForConditionalGeneration, BartConfig, BartTokenizer
 
+import torch
+import pandas as pd
+import numpy as np
+from transformers import BartForConditionalGeneration, BartConfig, BartTokenizer
+
 
 class Summary_Model(object):
     def __init__(self, summary_model_path, token_path, device):
@@ -19,6 +24,7 @@ class Summary_Model(object):
         self.model = self.model.to(self.device)
 
     def get_summary(self, data, count):
+        ### Top confident answer to article
         total_abstract = ''
         for i in range(len(data[:count])):
             abss, ans = data.loc[i, ['answer_sent', 'Answer']].values
@@ -58,4 +64,6 @@ class Summary_Model(object):
             Summary_text = "Can't find summary of answer"
 
         return Summary_text
+
+
 

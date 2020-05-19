@@ -21,4 +21,3 @@ class EncoderRNN(nn.Module):
         outputs = outputs[:, :, :self.hidden_size] + outputs[:, : ,self.hidden_size:]
         return outputs, hidden
 
-    
