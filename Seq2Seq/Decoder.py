@@ -16,7 +16,7 @@ class LuongAttnDecoderRNN(nn.Module):
 
         self.embedding = embedding
         self.embedding_dropout = nn.Dropout(dropout)
-        self.gru = nn.LSTM(hidden_size, hidden_size, n_layers*2, dropout=(0 if n_layers == 1 else dropout))
+        self.lstm = nn.LSTM(hidden_size, hidden_size, n_layers*2, dropout=(0 if n_layers == 1 else dropout))
         self.concat = nn.Linear(hidden_size *2, hidden_size)
         self.out = nn.Linear(hidden_size, output_size)
 
@@ -26,7 +26,7 @@ class LuongAttnDecoderRNN(nn.Module):
 
         embedded = self.embedding(input_step)
         embedded = self.embedding_dropout(embedded)
-        rnn_output, hidden = self.gru(embedded, last_hidden)
+        rnn_output, hidden = self.lstm(embedded, last_hidden)
         attn_weights = self.attn(rnn_output, encoder_outputs)
         # Multiply attention weights to encoder outputs to get new "weighted sum" context vector
         context = attn_weights.bmm(encoder_outputs.transpose(0, 1))

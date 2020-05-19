@@ -56,7 +56,8 @@ class TaskModelling(object):
         tasks_missings = {
             'task 1': ['incubation', 'stability', 'seasonality', 'season', 'winter', 'spring', 'summer', 'autumn','prediodically',
                        'carrying', 'transference', 'immunity', 'immune','quarantine','country', 'surface','weather'],
-            'task 2': ['danger', 'hazard', 'exposure','pregnancy','heart','prevent','weather','season','mask','disinfectant','hypertension','patient','prevention','precaution'],
+            'task 2': ['danger', 'hazard', 'exposure','pregnancy','heart','prevent','weather','season','mask','disinfectant','hypertension','patient','prevention','precaution', 'rna','cell'
+                       'viral','disease'],
             'task 3': ['genetic', 'origin','animal'],
             'task 4': ['interventions', 'non-pharmaceutical','drug','antiviral','ai'],
             'task 5': ['therapeutics'],

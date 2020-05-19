@@ -121,13 +121,17 @@ class MakeConv(object):
     def startConv(self):
         self.load_weights()
         input_sentence = ''
+        display(Markdown(f'<span style="color: black">Bot: Hello I am a chatbot. Please talk to me. If you want to quit write q or bye</span>'))
         while (1):
             try:
                 # Get input sentence
                 input_sentence = input('> ')
                 res = self.check_words(input_sentence)
                 # Check if it is quit case
-                if input_sentence == 'q' or input_sentence == 'quit': break
+                if (input_sentence == 'q' or input_sentence == 'quit' or input_sentence=='bye'):
+                    response = self.functions.End_conv()
+                    display(Markdown(f'<span style="color: black">{response}</span>'))
+                    break
 
                 reminder='Reminder; you can click the answer to read the article'
 

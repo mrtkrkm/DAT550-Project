@@ -16,7 +16,7 @@ class ResponseFunctions(object):
 
         self.Related_word = self.Cov_list + ['Virus', 'virus','transmission', 'incubate', 'incubation', 'weather', 'summer', 'virus',
                                    'Corona', 'corona', 'prevent', 'mask', 'disinfectant','precaution','drug','seasonality','immune',
-                                             'immunity','avoid','surface']
+                                             'immunity','avoid','surface','cell', 'viral', 'infect', 'infection']
 
         self.all_dicts, self.all_sums = self.read_dict_sum()
         self.task_questions = joblib.load('data/tasks/task_questions')
@@ -102,6 +102,7 @@ class ResponseFunctions(object):
             response = "Sorry i couldn't understand your question. Can you give more detail?"
             quest = ''
             urls = ['']
+            responseS=''
         else:
             best = sorted(result.items(), key=lambda x: x[1], reverse=True)[0]
             # response=find_task_ques(best)
